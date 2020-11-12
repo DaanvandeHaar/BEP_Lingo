@@ -1,4 +1,4 @@
-package main
+package http
 
 import (
 	"encoding/json"
@@ -29,16 +29,11 @@ type Word struct {
 	Word string `json:"word"`
 }
 
-const guesword = "bezemen"
+const guesword = "schepen"
 
 // Init books var as a slice Book struct
 
 var gameData []GameData
-
-func getBooks(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(gameData)
-}
 
 func getGameData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -51,6 +46,9 @@ func getGameData(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	json.NewEncoder(w).Encode(&GameData{})
+}
+func getWordForGame(gameId string) bool {
+	return false
 }
 
 func checkIfValidWord(s string) bool {
@@ -113,77 +111,15 @@ func compareWords(word string, comepareWord string) Try {
 	return try
 }
 
-//
-//// Update book
-//func updateBook(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", "application/json")
-//	params := mux.Vars(r)
-//	for index, item := range books {
-//		if item.ID == params["id"] {
-//			books = append(books[:index], books[index+1:]...)
-//			var book Book
-//			_ = json.NewDecoder(r.Body).Decode(&book)
-//			book.ID = params["id"]
-//			books = append(books, book)
-//			json.NewEncoder(w).Encode(book)
-//			return
-//		}
-//	}
-//}
-//
-//// Delete book
-//func deleteBook(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", "application/json")
-//	params := mux.Vars(r)
-//	for index, item := range books {
-//		if item.ID == params["id"] {
-//			books = append(books[:index], books[index+1:]...)
-//			break
-//		}
-//	}
-//	json.NewEncoder(w).Encode(books)
-//}
-
-// Main function
-func main() {
-	// Init router
+func StartHttpServer() {
 	r := mux.NewRouter()
 
-	e := GameData{
-		ID:       "1",
-		TryCount: 0,
-		Tries: []Try{
-			{
-				Letters: []Letter{
-					{
-						LetterString:   "B",
-						LetterPosition: 0,
-						RightPlace:     false,
-						RightLetter:    false,
-					},
-				},
-			},
-			{
-				Letters: []Letter{
-					{
-						LetterString:   "A",
-						LetterPosition: 1,
-						RightPlace:     true,
-						RightLetter:    true,
-					},
-				},
-			},
-		},
-	}
-	gameData = append(gameData, e)
-
 	// Route handles & endpoints
+	//r.Handle("game/", getGamesData).Methods("GET")
 	r.HandleFunc("/game/{id}", getGameData).Methods("GET")
-	r.HandleFunc("/books", getBooks).Methods("GET")
 	r.HandleFunc("/word", checkIfValid).Methods("POST")
-	//r.HandleFunc("/books/{id}", updateBook).Methods("PUT")
-	//r.HandleFunc("/books/{id}", deleteBook).Methods("DELETE")
 
 	// Start server
+	fmt.Println("Starting server at port 8000...")
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
