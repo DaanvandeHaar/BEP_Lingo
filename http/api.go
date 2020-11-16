@@ -1,6 +1,7 @@
 package http
 
 import (
+	"BEP_Lingo/persistence"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -10,13 +11,13 @@ import (
 )
 
 type GameData struct {
-	ID       string
-	TryCount int
-	Tries    []Try
+	ID    string
+	Tries []Try
 }
 
 type Try struct {
-	Letters []Letter
+	tryIndex int32
+	Letters  []Letter
 }
 
 type Letter struct {
@@ -35,6 +36,7 @@ const guesword = "schepen"
 
 var gameData []GameData
 
+//get data for old games
 func getGameData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) // Gets params
@@ -51,7 +53,8 @@ func getWordForGame(gameId string) bool {
 	return false
 }
 
-func checkIfValidWord(s string) bool {
+//check if the word only contains alphabetic characters
+func checkIfAlpha(s string) bool {
 	const alpha = "abcdefghijklmnopqrstuvwxyz"
 	for _, char := range s {
 		if !strings.Contains(alpha, strings.ToLower(string(char))) {
@@ -61,13 +64,14 @@ func checkIfValidWord(s string) bool {
 	return true
 }
 
-// Add new book
 func checkIfValid(w http.ResponseWriter, r *http.Request) {
+	persistence.GetRandomWord()
+
 	w.Header().Set("Content-Type", "application/json")
 	var word Word
 	_ = json.NewDecoder(r.Body).Decode(&word)
 	fmt.Println(word.Word)
-	if checkIfValidWord(word.Word) {
+	if checkIfAlpha(word.Word) {
 		if len(word.Word) == len(guesword) {
 			json.NewEncoder(w).Encode(compareWords(word.Word, guesword))
 		} else {
@@ -78,6 +82,7 @@ func checkIfValid(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//compare the two words
 func compareWords(word string, comepareWord string) Try {
 	var try Try
 	for pos, char := range word {
@@ -112,11 +117,12 @@ func compareWords(word string, comepareWord string) Try {
 }
 
 func StartHttpServer() {
+	// start server on new thread
 	r := mux.NewRouter()
 
 	// Route handles & endpoints
 	//r.Handle("game/", getGamesData).Methods("GET")
-	r.HandleFunc("/game/{id}", getGameData).Methods("GET")
+	r.HandleFunc("/game/", getGameData).Methods("GET")
 	r.HandleFunc("/word", checkIfValid).Methods("POST")
 
 	// Start server

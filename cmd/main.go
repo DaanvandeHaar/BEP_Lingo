@@ -6,5 +6,8 @@ import (
 
 // Main function
 func main() {
+
+	//start the http server
 	http.StartHttpServer()
+
 }
