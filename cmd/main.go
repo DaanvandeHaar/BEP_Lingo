@@ -1,13 +1,16 @@
 package main
 
 import (
-	"BEP_Lingo/http"
+	"awesomeProject/pkg/http/rest"
+	"log"
+	"net/http"
 )
 
 // Main function
 func main() {
 
-	//start the http server
-	http.StartHttpServer()
+	router := rest.Handler()
+
+	log.Fatal(http.ListenAndServe(":8000", router))
 
 }
