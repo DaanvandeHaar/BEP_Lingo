@@ -15,8 +15,3 @@ type Letter struct {
 	RightPlace     bool   `json:"rightPlace"`
 	RightLetter    bool   `json:"rightLetter"`
 }
-
-type WordInterface interface {
-	CheckIfAlpha(Word) (bool, error)
-	CompareWords(string, string) (Try, error)
-}

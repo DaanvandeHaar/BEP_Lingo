@@ -50,8 +50,10 @@ func JwtVerify(next http.Handler) http.Handler {
 			if token.Valid {
 				next.ServeHTTP(w, r)
 			} else {
-				json.NewEncoder(w).Encode("error, not authorized")
+				json.NewEncoder(w).Encode("Error, not authorized")
 			}
+		} else {
+			json.NewEncoder(w).Encode("Error, could not find JWT token")
 		}
 	})
 }

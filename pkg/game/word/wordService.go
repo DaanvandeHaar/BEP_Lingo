@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+type Service interface {
+	CheckIfAlpha(string) bool
+	CompareWords(string, string) Try
+}
+
 func CheckIfAlpha(s string) bool {
 	const alpha = "abcdefghijklmnopqrstuvwxyz"
 	for _, char := range s {
@@ -12,6 +17,7 @@ func CheckIfAlpha(s string) bool {
 			return false
 		}
 	}
+
 	return true
 }
 func CompareWords(word string, correctWord string) Try {
