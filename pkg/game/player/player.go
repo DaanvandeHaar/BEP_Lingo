@@ -1,8 +1,7 @@
 package player
 
 type Player struct {
-	UserName string `json:"userName"`
-	Password string `json:"password"`
-}
-type playerInterface interface {
+	UserName       string `json:"username"`
+	Password       string `json:"password"`
+	HashedPassword string
 }

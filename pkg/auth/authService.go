@@ -4,6 +4,7 @@ import (
 	"awesomeProject/pkg/game/player"
 	"encoding/json"
 	"net/http"
+	"os"
 	"strings"
 
 	"fmt"
@@ -12,7 +13,7 @@ import (
 )
 
 func GenerateJWT(player player.Player) string {
-	var mySignInKey = []byte("secretkey")
+	var mySignInKey = []byte(os.Getenv("KEY"))
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -31,7 +32,7 @@ func GenerateJWT(player player.Player) string {
 
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var mySignInKey = []byte("secretkey")
+		var mySignInKey = []byte(os.Getenv("KEY"))
 		var header = r.Header.Get("x-access-token")
 
 		json.NewEncoder(w).Encode(r)

@@ -1,13 +1,15 @@
 package game
 
-import "awesomeProject/pkg/persistence"
+type Service interface {
+	NewGame() Game
+}
 
-func newGame() Game {
+func InitGame() Game {
 	game := Game{
-		ID:         nil,
-		State:      GAME_STATE_5LETTER,
+		ID:         1,
+		State:      GAME_STATE_NEW,
 		CurrentTry: 0,
-		Word:       persistence.GetRandomWord(5),
+		Word:       "a",
 	}
 	return game
 }
