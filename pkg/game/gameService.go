@@ -1,18 +1,29 @@
 package game
 
 type Service interface {
-	NewGame() Game
+	InitGame([]string) Game
 }
 
-func InitGame() Game {
+type Repository interface {
+}
+type service struct {
+	r Repository
+}
+
+func NewService(r Repository) Service {
+	return &service{r}
+}
+
+func (s *service) InitGame(words []string) Game {
 	game := Game{
-		ID:         1,
 		State:      GAME_STATE_NEW,
 		CurrentTry: 0,
-		Word:       "a",
+		Score:      0,
+		Time:       nil,
 	}
-	return game
-}
-func makeGuess() {
+	game.FiveLetterWord = words[0]
+	game.SixLetterWord = words[1]
+	game.SevenLetterWord = words[2]
 
+	return game
 }

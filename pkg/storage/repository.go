@@ -71,11 +71,8 @@ func (s Storage) SignUpWithHash(player player.Player) bool {
 			fmt.Println(err)
 			return false
 		}
-		return true
-	case err == nil:
-		fmt.Println(err)
-		return false
 	default:
 		return false
 	}
+	return false
 }

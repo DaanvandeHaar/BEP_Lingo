@@ -24,12 +24,24 @@ func Handler(ws word.Service, gs game.Service, ps player.Service) *mux.Router {
 	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
 	authRouter.HandleFunc("/game/current/guess", guessWord(ws)).Methods("POST")
 	router.HandleFunc("/jwt", getJwt).Methods("GET")
-	//router.HandleFunc("/game/new", gs.NewGame).Methods("POST")
+	authRouter.HandleFunc("/game/new", newGame(gs, ws, ps)).Methods("POST")
 	router.HandleFunc("/auth/login", login(ps)).Methods("POST")
 	router.HandleFunc("/auth/signup", signUp(ps)).Methods("POST")
 
 	// return router to main.go
 	return router
+}
+func newGame(gs game.Service, ws word.Service, ps player.Service) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var player player.Player
+		var token = r.Header.Get("x-access-token")
+		player.UserName, _ = auth.GetUsernameFromToken(token)
+		var words []string
+		words = append(words, ws.GetRandomWord(5), ws.GetRandomWord(6), ws.GetRandomWord(7))
+		game := gs.InitGame(words)
+		json.NewEncoder(w).Encode(game)
+
+	}
 }
 func getRandomWord(ws word.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
