@@ -38,6 +38,16 @@ func NewStorage() *Storage {
 
 	return &Storage{db}
 }
+func (s Storage) GetIDForPlayer(username string) (int, error) {
+	var id int
+	err := s.db.QueryRow("SELECT id FROM users where username = $1", username).Scan(&id)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	return id, nil
+}
+
 func (s Storage) LoginWithHash(player player.Player) (bool, string) {
 
 	var databaseUsername string

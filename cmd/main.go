@@ -17,6 +17,7 @@ func main() {
 	var playerService player.Service
 	s := storage.NewStorage()
 
+	gameService = game.NewService(s)
 	wordService = word.NewService(s)
 	playerService = player.NewService(s)
 

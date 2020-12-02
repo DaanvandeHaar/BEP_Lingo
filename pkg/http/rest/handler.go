@@ -6,6 +6,7 @@ import (
 	"awesomeProject/pkg/game/player"
 	"awesomeProject/pkg/game/word"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -33,13 +34,30 @@ func Handler(ws word.Service, gs game.Service, ps player.Service) *mux.Router {
 }
 func newGame(gs game.Service, ws word.Service, ps player.Service) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var player player.Player
 		var token = r.Header.Get("x-access-token")
-		player.UserName, _ = auth.GetUsernameFromToken(token)
 		var words []string
+		username, err := auth.GetUsernameFromToken(token)
+		if err != nil {
+			w.WriteHeader(401)
+			json.NewEncoder(w).Encode("Error, Could not find or process token")
+			return
+		}
+		id, err := ps.GetIDForPlayer(username)
+		fmt.Println(id)
+		if id == 0 {
+			w.WriteHeader(500)
+			json.NewEncoder(w).Encode("Error, Could not find user")
+			return
+		}
 		words = append(words, ws.GetRandomWord(5), ws.GetRandomWord(6), ws.GetRandomWord(7))
-		game := gs.InitGame(words)
-		json.NewEncoder(w).Encode(game)
+		game, err := gs.InitGame(words, id)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(500)
+			json.NewEncoder(w).Encode("Error, Could not save new game")
+
+		}
+		json.NewEncoder(w).Encode(game.ID)
 
 	}
 }

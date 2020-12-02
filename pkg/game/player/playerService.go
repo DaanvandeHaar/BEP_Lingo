@@ -8,10 +8,12 @@ import (
 type Service interface {
 	Login(Player) (bool, string)
 	SignUp(Player) bool
+	GetIDForPlayer(string) (int, error)
 }
 type Repository interface {
 	LoginWithHash(Player) (bool, string)
 	SignUpWithHash(Player) bool
+	GetIDForPlayer(string) (int, error)
 }
 
 type service struct {
@@ -20,6 +22,14 @@ type service struct {
 
 func NewService(r Repository) Service {
 	return &service{r}
+}
+func (s *service) GetIDForPlayer(username string) (int, error) {
+	id, err := s.r.GetIDForPlayer(username)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	return id, nil
 }
 
 func (s *service) Login(player Player) (bool, string) {

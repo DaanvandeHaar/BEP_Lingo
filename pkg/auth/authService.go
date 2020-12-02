@@ -30,7 +30,7 @@ func GenerateJWT(player player.Player) string {
 	tokenString, err := token.SignedString(mySignInKey)
 
 	if err != nil {
-		fmt.Errorf("something went wrong: %s", err)
+		fmt.Println(err)
 	}
 	return tokenString
 }
@@ -40,7 +40,7 @@ func GetUsernameFromToken(tokenStr string) (string, error) {
 		return mySignInKey, nil
 	})
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Println(err)
 		return "", err
 	}
 	claims := token.Claims.(jwt.MapClaims)
@@ -65,7 +65,7 @@ func JwtVerify(next http.Handler) http.Handler {
 			})
 			if err != nil {
 				w.WriteHeader(400)
-				json.NewEncoder(w).Encode("Error, Found token but expired or formated incorectly")
+				json.NewEncoder(w).Encode("Error, Found token but expired or formatted incorrectly")
 				return
 			}
 			if token.Valid {
