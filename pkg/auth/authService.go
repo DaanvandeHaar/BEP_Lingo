@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"awesomeProject/pkg/game/player"
+	"BEP_Lingo/pkg/game/player"
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"

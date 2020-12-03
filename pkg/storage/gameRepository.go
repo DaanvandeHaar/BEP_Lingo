@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"awesomeProject/pkg/game"
+	"BEP_Lingo/pkg/game"
 	"fmt"
 )
 
@@ -38,6 +38,30 @@ func (s Storage) NewGame(game game.Game) (int, error) {
 	}
 	return id, nil
 }
+
+func (s *Storage) raiseGameState(gameID int, playerID int) bool {
+	_, err := s.db.Query("UPDATE game SET state = state + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (s *Storage) raiseTryState(gameID int, playerID int) bool {
+	_, err := s.db.Query("UPDATE game SET current_try = current_try + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+func (s *Storage) raiseGameScore(gameID int, playerID int) bool {
+	_, err := s.db.Query("UPDATE game SET score = score + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (s Storage) GetGame(playerID int, gameID int) interface{} {
 	var game game.Game
 	err := s.db.QueryRow(`

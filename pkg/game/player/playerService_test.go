@@ -38,9 +38,7 @@ func Test_service_Login(t *testing.T) {
 		args   args
 		want   bool
 		want1  string
-	}{
-		// TODO: Add test cases.
-	}
+	}{}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &service{

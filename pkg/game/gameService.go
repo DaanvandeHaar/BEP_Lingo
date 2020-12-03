@@ -7,11 +7,16 @@ import (
 
 type Service interface {
 	InitGame([]string, int) (Game, error)
-	RaiseGameState(int) bool
+	RaiseGameState(int, int) bool
+	RaiseTryCount(int, int) bool
+	RaiseGameScore(int, int) bool
 }
 
 type Repository interface {
 	NewGame(Game) (int, error)
+	RaiseGameState(int, int) bool
+	RaiseTryCount(int, int) bool
+	RaiseGameScore(int, int) bool
 }
 type service struct {
 	r Repository
@@ -40,7 +45,23 @@ func (s *service) InitGame(words []string, playerID int) (Game, error) {
 	game.ID = gameID
 	return game, nil
 }
-func (s *service) RaiseGameState(id int) bool {
+func (s *service) RaiseGameScore(gameID int, playerID int) bool {
+	if s.r.RaiseGameScore(gameID, playerID) {
+		return true
+	}
+	return false
+}
 
-	return true
+func (s *service) RaiseGameState(gameID int, playerID int) bool {
+	if s.r.RaiseGameState(gameID, playerID) {
+		return true
+	}
+	return false
+}
+
+func (s *service) RaiseTryCount(gameID int, playerID int) bool {
+	if s.r.RaiseTryCount(gameID, playerID) {
+		return true
+	}
+	return false
 }
