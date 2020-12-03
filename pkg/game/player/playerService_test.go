@@ -1,4 +1,4 @@
-package word
+package player
 
 import (
 	"reflect"
@@ -25,12 +25,44 @@ func TestNewService(t *testing.T) {
 	}
 }
 
-func Test_service_CheckIfAlpha(t *testing.T) {
+func Test_service_Login(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
 	type args struct {
-		word Word
+		player Player
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+		want1  string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				r: tt.fields.r,
+			}
+			got, got1 := s.Login(tt.args.player)
+			if got != tt.want {
+				t.Errorf("Login() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("Login() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func Test_service_SignUp(t *testing.T) {
+	type fields struct {
+		r Repository
+	}
+	type args struct {
+		player Player
 	}
 	tests := []struct {
 		name   string
@@ -45,63 +77,8 @@ func Test_service_CheckIfAlpha(t *testing.T) {
 			s := &service{
 				r: tt.fields.r,
 			}
-			if got := s.CheckIfAlpha(tt.args.word); got != tt.want {
-				t.Errorf("CheckIfAlpha() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_service_CompareWords(t *testing.T) {
-	type fields struct {
-		r Repository
-	}
-	type args struct {
-		word        string
-		correctWord string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   Try
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				r: tt.fields.r,
-			}
-			if got := s.CompareWords(tt.args.word, tt.args.correctWord); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CompareWords() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_service_GetRandomWord(t *testing.T) {
-	type fields struct {
-		r Repository
-	}
-	type args struct {
-		len int
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   string
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				r: tt.fields.r,
-			}
-			if got := s.GetRandomWord(tt.args.len); got != tt.want {
-				t.Errorf("GetRandomWord() = %v, want %v", got, tt.want)
+			if got := s.SignUp(tt.args.player); got != tt.want {
+				t.Errorf("SignUp() = %v, want %v", got, tt.want)
 			}
 		})
 	}

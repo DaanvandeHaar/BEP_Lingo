@@ -6,13 +6,28 @@ import (
 )
 
 type Service interface {
-	CheckIfAlpha(string) bool
+	CheckIfAlpha(Word) bool
 	CompareWords(string, string) Try
+	GetRandomWord(int) string
+}
+type Repository interface {
+	GetRandomWord(int) string
+}
+type service struct {
+	r Repository
 }
 
-func CheckIfAlpha(s string) bool {
+func NewService(r Repository) Service {
+	return &service{r}
+}
+
+func (s *service) GetRandomWord(len int) string {
+	return s.r.GetRandomWord(len)
+}
+
+func (s *service) CheckIfAlpha(word Word) bool {
 	const alpha = "abcdefghijklmnopqrstuvwxyz"
-	for _, char := range s {
+	for _, char := range word.Word {
 		if !strings.Contains(alpha, strings.ToLower(string(char))) {
 			return false
 		}
@@ -20,7 +35,7 @@ func CheckIfAlpha(s string) bool {
 
 	return true
 }
-func CompareWords(word string, correctWord string) Try {
+func (s *service) CompareWords(word string, correctWord string) Try {
 	var try Try
 	for pos, char := range word {
 		if correctWord[pos] == word[pos] {

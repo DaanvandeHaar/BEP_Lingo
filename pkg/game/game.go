@@ -7,10 +7,15 @@ import (
 type State string
 
 type Game struct {
-	ID         int
-	State      int
-	CurrentTry int
-	Word       string
+	ID              int    `json:"id"`
+	PlayerID        int    `json:"player_id"`
+	State           int    `json:"state"`
+	CurrentTry      int    `json:"try"`
+	FiveLetterWord  string `json:"five_letter_word"`
+	SixLetterWord   string `json:"six_letter_word"`
+	SevenLetterWord string `json:"seven_letter_word"`
+	Score           int    `json:"score"`
+	Time            int64  `json:"time"`
 }
 
 var ErrGameNotFound = errors.New("game not found")

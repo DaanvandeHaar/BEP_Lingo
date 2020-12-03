@@ -1,16 +1,46 @@
 package game
 
-import "awesomeProject/pkg/persistence"
+import (
+	"fmt"
+	"time"
+)
 
-func newGame() Game {
-	game := Game{
-		ID:         nil,
-		State:      GAME_STATE_5LETTER,
-		CurrentTry: 0,
-		Word:       persistence.GetRandomWord(5),
-	}
-	return game
+type Service interface {
+	InitGame([]string, int) (Game, error)
+	RaiseGameState(int) bool
 }
-func makeGuess() {
 
+type Repository interface {
+	NewGame(Game) (int, error)
+}
+type service struct {
+	r Repository
+}
+
+func NewService(r Repository) Service {
+	return &service{r}
+}
+
+func (s *service) InitGame(words []string, playerID int) (Game, error) {
+	game := Game{
+		State:      GAME_STATE_NEW,
+		CurrentTry: 0,
+		Score:      0,
+		Time:       time.Now().Unix(),
+	}
+	game.FiveLetterWord = words[0]
+	game.SixLetterWord = words[1]
+	game.SevenLetterWord = words[2]
+	game.PlayerID = playerID
+	gameID, err := s.r.NewGame(game)
+	if err != nil {
+		fmt.Println(err)
+		return game, err
+	}
+	game.ID = gameID
+	return game, nil
+}
+func (s *service) RaiseGameState(id int) bool {
+
+	return true
 }
