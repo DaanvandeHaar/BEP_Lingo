@@ -215,7 +215,7 @@ func (s *service) Test_service_RaiseTryCount(t *testing.T) {
 				gameID:   1,
 				playerID: 1,
 			},
-			want: false,
+			want: true,
 		},
 	}
 	for _, tt := range tests {
