@@ -38,7 +38,18 @@ func Test_service_CheckIfAlpha(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "check_if_alpha_pass",
+			fields: fields{},
+			args:   args{word: Word{"adfjkldfjkaigii"}},
+			want:   true,
+		},
+		{
+			name:   "check_if_alpha_pass",
+			fields: fields{},
+			args:   args{word: Word{"dkln8ddd"}},
+			want:   false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

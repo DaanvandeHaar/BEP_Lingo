@@ -58,8 +58,8 @@ func JwtVerify(next http.Handler) http.Handler {
 		header = strings.TrimSpace(header)
 		if header != "" {
 			token, err := jwt.Parse(header, func(token *jwt.Token) (interface{}, error) {
-				if err, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, fmt.Errorf("JWT error: %e", err)
+				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, fmt.Errorf("JWT error")
 				}
 				return mySignInKey, nil
 			})

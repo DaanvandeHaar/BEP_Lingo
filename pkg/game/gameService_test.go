@@ -40,7 +40,7 @@ func Test_service_InitGame(t *testing.T) {
 		want    Game
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		//TODO write tests
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -129,7 +129,15 @@ func Test_service_RaiseTryCount(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "raise_try_count",
+			fields: fields{},
+			args: args{
+				gameID:   5,
+				playerID: 2,
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

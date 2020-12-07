@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"awesomeProject/pkg/game/player"
+	"BEP_Lingo/pkg/game/player"
 	"net/http"
 	"reflect"
 	"testing"
