@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"awesomeProject/pkg/auth"
-	"awesomeProject/pkg/game/player"
+	"BEP_Lingo/pkg/auth"
+	"BEP_Lingo/pkg/game/player"
 	"database/sql"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
@@ -69,8 +69,7 @@ func (s Storage) LoginWithHash(player player.Player) (bool, string) {
 func (s Storage) SignUpWithHash(player player.Player) bool {
 	var user string
 	err := s.db.QueryRow("SELECT username FROM users WHERE username=$1", player.UserName).Scan(&user)
-	switch {
-	case err != nil:
+	if err != nil {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(player.Password), bcrypt.DefaultCost)
 		if err != nil {
 			fmt.Println(err)
@@ -80,9 +79,10 @@ func (s Storage) SignUpWithHash(player player.Player) bool {
 		if err != nil {
 			fmt.Println(err)
 			return false
+		} else {
+			return true
 		}
-	default:
+	} else {
 		return false
 	}
-	return false
 }

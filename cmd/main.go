@@ -1,11 +1,11 @@
 package main
 
 import (
-	"awesomeProject/pkg/game"
-	"awesomeProject/pkg/game/player"
-	"awesomeProject/pkg/game/word"
-	"awesomeProject/pkg/http/rest"
-	"awesomeProject/pkg/storage"
+	"BEP_Lingo/pkg/game"
+	"BEP_Lingo/pkg/game/player"
+	"BEP_Lingo/pkg/game/word"
+	"BEP_Lingo/pkg/http/rest"
+	"BEP_Lingo/pkg/storage"
 	"log"
 	"net/http"
 )

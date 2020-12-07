@@ -5,24 +5,24 @@ import (
 	"testing"
 )
 
-func TestNewService(t *testing.T) {
-	type args struct {
-		r Repository
+type mockingStorage struct {
+	word []Word
+}
+
+func (m mockingStorage) GetRandomWord(i int) string {
+	switch {
+	case i < 5:
+		return ""
+	case i == 5:
+		return "woord"
+	case i == 6:
+		return "burger"
+	case i == 7:
+		return "knuffel"
+	case i > 7:
+		return ""
 	}
-	tests := []struct {
-		name string
-		args args
-		want Service
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewService(tt.args.r); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewService() = %v, want %v", got, tt.want)
-			}
-		})
-	}
+	return ""
 }
 
 func Test_service_CheckIfAlpha(t *testing.T) {
@@ -38,7 +38,18 @@ func Test_service_CheckIfAlpha(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "CHECK_IF_ALPHA_PASS",
+			fields: fields{},
+			args:   args{word: Word{"adfjkldfjkaigii"}},
+			want:   true,
+		},
+		{
+			name:   "CHECK_IF_ALPHA_FAIL",
+			fields: fields{},
+			args:   args{word: Word{"dkln8ddd"}},
+			want:   false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -56,6 +67,7 @@ func Test_service_CompareWords(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockingStorage)
 	type args struct {
 		word        string
 		correctWord string
@@ -66,7 +78,80 @@ func Test_service_CompareWords(t *testing.T) {
 		args   args
 		want   Try
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "COMPARE_WORDS_PASS",
+			fields: fields{mR},
+			args: args{
+				word:        "knoop",
+				correctWord: "knoop",
+			},
+			want: Try{
+				tryIndex: 0,
+				Letters: []Letter{{
+					LetterString:   "k",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "p",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+		},
+		{
+			name:   "COMPARE_WORDS_FAIL",
+			fields: fields{mR},
+			args: args{
+				word:        "knoop",
+				correctWord: "kneep",
+			},
+			want: Try{
+				tryIndex: 0,
+				Letters: []Letter{{
+					LetterString:   "k",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 2,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 3,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "p",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -84,6 +169,7 @@ func Test_service_GetRandomWord(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockingStorage)
 	type args struct {
 		len int
 	}
@@ -93,7 +179,30 @@ func Test_service_GetRandomWord(t *testing.T) {
 		args   args
 		want   string
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "GET_RANDOM_WORD_PASS_1",
+			fields: fields{mR},
+			args:   args{5},
+			want:   "woord",
+		},
+		{
+			name:   "GET_RANDOM_WORD_PASS_2",
+			fields: fields{mR},
+			args:   args{7},
+			want:   "knuffel",
+		},
+		{
+			name:   "GET_RANDOM_WORD_FAIL_1",
+			fields: fields{mR},
+			args:   args{4},
+			want:   "",
+		},
+		{
+			name:   "GET_RANDOM_WORD_FAIL_2",
+			fields: fields{mR},
+			args:   args{8},
+			want:   "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

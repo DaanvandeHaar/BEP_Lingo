@@ -1,10 +1,10 @@
 package rest
 
 import (
-	"awesomeProject/pkg/auth"
-	"awesomeProject/pkg/game"
-	"awesomeProject/pkg/game/player"
-	"awesomeProject/pkg/game/word"
+	"BEP_Lingo/pkg/auth"
+	"BEP_Lingo/pkg/game"
+	"BEP_Lingo/pkg/game/player"
+	"BEP_Lingo/pkg/game/word"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"

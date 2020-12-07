@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"awesomeProject/pkg/game/player"
+	"BEP_Lingo/pkg/game/player"
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -58,8 +58,8 @@ func JwtVerify(next http.Handler) http.Handler {
 		header = strings.TrimSpace(header)
 		if header != "" {
 			token, err := jwt.Parse(header, func(token *jwt.Token) (interface{}, error) {
-				if err, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-					return nil, fmt.Errorf("JWT error: %e", err)
+				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, fmt.Errorf("JWT error")
 				}
 				return mySignInKey, nil
 			})
