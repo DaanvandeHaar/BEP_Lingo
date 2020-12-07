@@ -27,6 +27,10 @@ func NewService(r Repository) Service {
 }
 
 func (s *service) InitGame(words []string, playerID int) (Game, error) {
+	if s == nil {
+		fmt.Println("Service not found")
+		return Game{}, fmt.Errorf("Err: service not found")
+	}
 	game := Game{
 		State:      GAME_STATE_NEW,
 		CurrentTry: 0,
@@ -46,6 +50,10 @@ func (s *service) InitGame(words []string, playerID int) (Game, error) {
 	return game, nil
 }
 func (s *service) RaiseGameScore(gameID int, playerID int) bool {
+	if s == nil {
+		fmt.Println("Service not found")
+		return false
+	}
 	if s.r.RaiseGameScore(gameID, playerID) {
 		return true
 	}
@@ -53,6 +61,10 @@ func (s *service) RaiseGameScore(gameID int, playerID int) bool {
 }
 
 func (s *service) RaiseGameState(gameID int, playerID int) bool {
+	if s == nil {
+		fmt.Println("Service not found")
+		return false
+	}
 	if s.r.RaiseGameState(gameID, playerID) {
 		return true
 	}
@@ -60,6 +72,10 @@ func (s *service) RaiseGameState(gameID int, playerID int) bool {
 }
 
 func (s *service) RaiseTryCount(gameID int, playerID int) bool {
+	if s == nil {
+		fmt.Println("Service not found")
+		return false
+	}
 	if s.r.RaiseTryCount(gameID, playerID) {
 		return true
 	}

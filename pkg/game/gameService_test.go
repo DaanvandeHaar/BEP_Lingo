@@ -3,32 +3,54 @@ package game
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
-func TestNewService(t *testing.T) {
-	type args struct {
-		r Repository
+type mockStorage struct {
+	game []Game
+}
+
+func (m *mockStorage) NewGame(game Game) (int, error) {
+	return 1, nil
+}
+
+func (m *mockStorage) RaiseGameState(gameID int, playerID int) bool {
+	switch {
+	case &gameID == nil || &playerID == nil:
+		return false
+	case gameID == 0 && playerID == 0:
+		return false
+	case gameID == 1 && playerID == 0:
+		return false
+	case gameID == 0 && playerID == 1:
+		return false
+	case gameID == 1 && playerID == 1:
+		return true
+	case gameID == 2 && playerID == 2:
+		return true
 	}
-	tests := []struct {
-		name string
-		args args
-		want Service
-	}{
-		// TODO: Add test cases.
+	return false
+}
+
+func (m *mockStorage) RaiseTryCount(gameID int, playerID int) bool {
+	if gameID != 0 && playerID != 0 {
+		return true
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewService(tt.args.r); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewService() = %v, want %v", got, tt.want)
-			}
-		})
+	return false
+}
+
+func (m *mockStorage) RaiseGameScore(gameID int, playerID int) bool {
+	if gameID != 0 && playerID != 0 {
+		return true
 	}
+	return false
 }
 
 func Test_service_InitGame(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockStorage)
 	type args struct {
 		words    []string
 		playerID int
@@ -40,7 +62,26 @@ func Test_service_InitGame(t *testing.T) {
 		want    Game
 		wantErr bool
 	}{
-		//TODO write tests
+		{
+			name:   "INIT_GAME_PASS",
+			fields: fields{mR},
+			args: args{
+				words:    []string{"knoop", "schiet", "schepen"},
+				playerID: 1,
+			},
+			want: Game{
+				ID:              1,
+				PlayerID:        1,
+				State:           0,
+				CurrentTry:      0,
+				FiveLetterWord:  "knoop",
+				SixLetterWord:   "schiet",
+				SevenLetterWord: "schepen",
+				Score:           0,
+				Time:            time.Now().Unix(),
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -63,6 +104,7 @@ func Test_service_RaiseGameScore(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockStorage)
 	type args struct {
 		gameID   int
 		playerID int
@@ -73,7 +115,24 @@ func Test_service_RaiseGameScore(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "RAISE_GAME_SCORE_PASS",
+			fields: fields{mR},
+			args: args{
+				gameID:   1,
+				playerID: 1,
+			},
+			want: true,
+		},
+		{
+			name:   "RAISE_GAME_SCORE_FAIL",
+			fields: fields{mR},
+			args: args{
+				gameID:   0,
+				playerID: 0,
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -91,6 +150,7 @@ func Test_service_RaiseGameState(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockStorage)
 	type args struct {
 		gameID   int
 		playerID int
@@ -101,7 +161,15 @@ func Test_service_RaiseGameState(t *testing.T) {
 		args   args
 		want   bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "RAISE_GAME_STATE_PASS",
+			fields: fields{mR},
+			args: args{
+				gameID:   1,
+				playerID: 1,
+			},
+			want: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -115,10 +183,12 @@ func Test_service_RaiseGameState(t *testing.T) {
 	}
 }
 
-func Test_service_RaiseTryCount(t *testing.T) {
+func (s *service) Test_service_RaiseTryCount(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockStorage)
+
 	type args struct {
 		gameID   int
 		playerID int
@@ -130,11 +200,20 @@ func Test_service_RaiseTryCount(t *testing.T) {
 		want   bool
 	}{
 		{
-			name:   "raise_try_count",
-			fields: fields{},
+			name:   "TEST_RAISE_TRY_COUNT_FAIL",
+			fields: fields{mR},
 			args: args{
 				gameID:   5,
 				playerID: 2,
+			},
+			want: false,
+		},
+		{
+			name:   "TEST_RAISE_TRY_COUNT_PASS",
+			fields: fields{mR},
+			args: args{
+				gameID:   1,
+				playerID: 1,
 			},
 			want: false,
 		},
