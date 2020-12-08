@@ -49,6 +49,7 @@ func (s *service) InitGame(words []string, playerID int) (Game, error) {
 	game.ID = gameID
 	return game, nil
 }
+
 func (s *service) RaiseGameScore(gameID int, playerID int) bool {
 	if s == nil {
 		fmt.Println("Service not found")

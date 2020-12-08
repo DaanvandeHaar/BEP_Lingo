@@ -113,6 +113,7 @@ func login(p player.Service) func(w http.ResponseWriter, r *http.Request) {
 func guessWord(s word.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		//var token = r.Header.Get("x-access-token")
 		var input word.Word
 		_ = json.NewDecoder(r.Body).Decode(&input)
 		if s.CheckIfAlpha(input) {

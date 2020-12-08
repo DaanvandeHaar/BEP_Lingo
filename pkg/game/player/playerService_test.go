@@ -33,7 +33,7 @@ func (m mockStorage) GetIDForPlayer(s string) (int, error) {
 	case s == "henk":
 		return 2, nil
 	case s == "frank":
-		return 0, ErrUerNotFound
+		return 0, ErrUserNotFound
 	case s == "":
 		return 0, errors.New("err, name field empty")
 	}

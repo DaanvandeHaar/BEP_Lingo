@@ -8,4 +8,4 @@ type Player struct {
 	HashedPassword string
 }
 
-var ErrUerNotFound = errors.New("err, could not find user")
+var ErrUserNotFound = errors.New("err, could not find user")
