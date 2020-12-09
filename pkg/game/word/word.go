@@ -4,12 +4,12 @@ type Word struct {
 	Word string `json:"word"`
 }
 
-type Try struct {
+type LingoMessage struct {
 	tryIndex int
-	Letters  []Letter
+	Letters  []LetterInfo
 }
 
-type Letter struct {
+type LetterInfo struct {
 	LetterString   string `json:"letterString"`
 	LetterPosition int    `json:"letterPosition"`
 	RightPlace     bool   `json:"rightPlace"`

@@ -62,7 +62,7 @@ func (s Storage) RaiseGameScore(gameID int, playerID int) bool {
 	return true
 }
 
-func (s Storage) GetGameForID(playerID int, gameID int) interface{} {
+func (s Storage) GetGameForID(playerID int, gameID int) (game.Game, error) {
 	var game game.Game
 	err := s.db.QueryRow(`
 		SELECT (
@@ -89,12 +89,12 @@ func (s Storage) GetGameForID(playerID int, gameID int) interface{} {
 
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return game, err
 	}
-	return game
+	return game, nil
 }
 
-func (s Storage) GetCurrentGame(playerID int, gameID int) interface{} {
+func (s Storage) GetCurrentGame(playerID int) (game.Game, error) {
 	var game game.Game
 	err := s.db.QueryRow(`
 		SELECT (
@@ -108,9 +108,9 @@ func (s Storage) GetCurrentGame(playerID int, gameID int) interface{} {
 		        score, 
 		        current_try)
 		FROM games 
-		WHERE id == $1 
+		WHERE player_id == $1 
 		ORDER BY id DESC 
-		LIMIT 1`, gameID, playerID).Scan(
+		LIMIT 1`, playerID).Scan(
 		&game.ID,
 		&game.PlayerID,
 		&game.FiveLetterWord,
@@ -123,7 +123,7 @@ func (s Storage) GetCurrentGame(playerID int, gameID int) interface{} {
 
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return game, err
 	}
-	return game
+	return game, nil
 }

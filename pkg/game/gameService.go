@@ -1,6 +1,7 @@
 package game
 
 import (
+	"BEP_Lingo/pkg/game/word"
 	"fmt"
 	"time"
 )
@@ -10,6 +11,8 @@ type Service interface {
 	RaiseGameState(int, int) bool
 	RaiseTryCount(int, int) bool
 	RaiseGameScore(int, int) bool
+	GameRunner(word.Service, string, int) (word.LingoMessage, error)
+	GetCurrentGame(int) (Game, error)
 }
 
 type Repository interface {
@@ -17,7 +20,10 @@ type Repository interface {
 	RaiseGameState(int, int) bool
 	RaiseTryCount(int, int) bool
 	RaiseGameScore(int, int) bool
+	GetCurrentGame(int) (Game, error)
+	GetGameForID(int, int) (Game, error)
 }
+
 type service struct {
 	r Repository
 }
@@ -48,6 +54,53 @@ func (s *service) InitGame(words []string, playerID int) (Game, error) {
 	}
 	game.ID = gameID
 	return game, nil
+}
+func (s *service) GetCurrentGame(playerID int) (Game, error) {
+	game, err := s.r.GetCurrentGame(playerID)
+	if err != nil {
+		return game, ErrGameNotFound
+	}
+	return game, nil
+}
+func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.LingoMessage, error) {
+	game, err := s.r.GetCurrentGame(playerID)
+	if err != nil {
+		return ws.CompareWords("", ""), ErrGameNotFound
+	}
+	switch game.State {
+	case GAME_STATE_NEW:
+		{
+			s.r.RaiseGameState(game.ID, game.PlayerID)
+			return ws.CompareWords(game.FiveLetterWord, ws.GetWordHelp(game.SixLetterWord)), nil
+		}
+	case GAME_STATE_5LETTER:
+		if game.CurrentTry >= 5 {
+			s.r.RaiseGameState(game.ID, game.PlayerID)
+			return ws.CompareWords(game.SixLetterWord, ws.GetWordHelp(game.SixLetterWord)), nil
+		} else {
+
+		}
+	case GAME_STATE_6LETTER:
+		if game.CurrentTry != 5 {
+
+		} else {
+
+		}
+	case GAME_STATE_7LETTER:
+		if game.CurrentTry != 5 {
+
+		} else {
+
+		}
+	case GAME_STATE_OVER:
+		if game.CurrentTry != 5 {
+
+		} else {
+
+		}
+
+	}
+	return ws.CompareWords("", ""), nil
 }
 
 func (s *service) RaiseGameScore(gameID int, playerID int) bool {

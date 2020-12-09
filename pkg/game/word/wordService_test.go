@@ -76,7 +76,7 @@ func Test_service_CompareWords(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   Try
+		want   LingoMessage
 	}{
 		{
 			name:   "COMPARE_WORDS_PASS",
@@ -85,9 +85,9 @@ func Test_service_CompareWords(t *testing.T) {
 				word:        "knoop",
 				correctWord: "knoop",
 			},
-			want: Try{
+			want: LingoMessage{
 				tryIndex: 0,
-				Letters: []Letter{{
+				Letters: []LetterInfo{{
 					LetterString:   "k",
 					LetterPosition: 0,
 					RightPlace:     true,
@@ -122,9 +122,9 @@ func Test_service_CompareWords(t *testing.T) {
 				word:        "knoop",
 				correctWord: "kneep",
 			},
-			want: Try{
+			want: LingoMessage{
 				tryIndex: 0,
-				Letters: []Letter{{
+				Letters: []LetterInfo{{
 					LetterString:   "k",
 					LetterPosition: 0,
 					RightPlace:     true,
@@ -211,6 +211,39 @@ func Test_service_GetRandomWord(t *testing.T) {
 			}
 			if got := s.GetRandomWord(tt.args.len); got != tt.want {
 				t.Errorf("GetRandomWord() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_service_GetWordInfo(t *testing.T) {
+	type fields struct {
+		r Repository
+	}
+	mR := new(mockingStorage)
+	type args struct {
+		word string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+	}{
+		{
+			name:   "test",
+			fields: fields{mR},
+			args:   args{"woord"},
+			want:   "w____",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				r: tt.fields.r,
+			}
+			if got := s.GetWordHelp(tt.args.word); got != tt.want {
+				t.Errorf("GetWordHelp() = %v, want %v", got, tt.want)
 			}
 		})
 	}
