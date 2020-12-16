@@ -1,6 +1,11 @@
 
 # BEP_Lingo
 <a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-13%25-brightgreen.svg?longCache=true&style=flat)</a>
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DaanvandeHaar_BEP_Lingo&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DaanvandeHaar_BEP_Lingo)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DaanvandeHaar_BEP_Lingo&metric=security_rating)](https://sonarcloud.io/dashboard?id=DaanvandeHaar_BEP_Lingo)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DaanvandeHaar_BEP_Lingo&metric=sqale_index)](https://sonarcloud.io/dashboard?id=DaanvandeHaar_BEP_Lingo)
+
+</br>
 Een lingo API voor het vak BEP aan de HU
 
 ## Build tools en pipeline
