@@ -35,7 +35,7 @@ func NewService(r Repository) Service {
 }
 
 func (s *service) InitGame(words []string, playerID int) (Game, error) {
-	if s == nil {
+	if s.r == nil {
 		fmt.Println("Service not found")
 		return Game{}, fmt.Errorf("Err: service not found")
 	}
@@ -65,6 +65,9 @@ func (s *service) GetCurrentGame(playerID int) (Game, error) {
 	return game, nil
 }
 func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.LingoMessage, error) {
+	if s.r == nil {
+		return ws.GetEmptyMessage(), errors.New("Error, nil pointer")
+	}
 	game, err := s.r.GetCurrentGame(playerID)
 	if err != nil {
 		result, _ := ws.CompareWords("", "")
@@ -162,7 +165,7 @@ func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.L
 }
 
 func (s *service) RaiseGameScore(gameID int, playerID int, score int) bool {
-	if s == nil {
+	if s.r == nil {
 		fmt.Println("Service not found")
 		return false
 	}
@@ -173,7 +176,7 @@ func (s *service) RaiseGameScore(gameID int, playerID int, score int) bool {
 }
 
 func (s *service) RaiseGameState(gameID int, playerID int) bool {
-	if s == nil {
+	if s.r == nil {
 		fmt.Println("Service not found")
 		return false
 	}
@@ -184,7 +187,7 @@ func (s *service) RaiseGameState(gameID int, playerID int) bool {
 }
 
 func (s *service) RaiseTryCount(gameID int, playerID int) bool {
-	if s == nil {
+	if s.r == nil {
 		fmt.Println("Service not found")
 		return false
 	}

@@ -25,7 +25,7 @@ func GenerateJWT(player player.Player) string {
 
 	claims["authorized"] = true
 	claims["player"] = player.UserName
-	claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
 	tokenString, err := token.SignedString(mySignInKey)
 
