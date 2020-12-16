@@ -22,12 +22,14 @@ func Handler(ws word.Service, gs game.Service, ps player.Service) *mux.Router {
 	authRouter.Use(auth.JwtVerify)
 
 	// Route handles & endpoints
-	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
-	authRouter.HandleFunc("/game/current/guess", guessWord(ws)).Methods("POST")
-	router.HandleFunc("/jwt", getJwt).Methods("GET")
+	authRouter.HandleFunc("/game/current/guess", playGame(ws, ps, gs)).Methods("POST")
 	authRouter.HandleFunc("/game/new", newGame(gs, ws, ps)).Methods("POST")
 	router.HandleFunc("/auth/login", login(ps)).Methods("POST")
 	router.HandleFunc("/auth/signup", signUp(ps)).Methods("POST")
+
+	// Route handles & endpoints for testing
+	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
+	router.HandleFunc("/jwt", getJwt).Methods("GET")
 
 	// return router to main.go
 	return router
@@ -76,7 +78,7 @@ func signUp(p player.Service) func(http.ResponseWriter, *http.Request) {
 		_ = json.NewDecoder(r.Body).Decode(&player)
 		bool := p.SignUp(player)
 		if bool == false {
-			json.NewEncoder(w).Encode("could not create new user")
+			json.NewEncoder(w).Encode("Error, could not create new user")
 			return
 		}
 		json.NewEncoder(w).Encode("new user with username: " + player.UserName + " created")
@@ -99,31 +101,45 @@ func login(p player.Service) func(w http.ResponseWriter, r *http.Request) {
 		var player player.Player
 		_ = json.NewDecoder(r.Body).Decode(&player)
 		if player.UserName == "" || player.Password == "" {
-			json.NewEncoder(w).Encode("err: username or password was not filled in correctly")
+			json.NewEncoder(w).Encode("Error, username or password was not filled in correctly")
 		}
 		bool, token := p.Login(player)
 		if bool == false {
-			json.NewEncoder(w).Encode("err: Wrong username or password")
+			json.NewEncoder(w).Encode("Error, Wrong username or password")
 		} else {
 			json.NewEncoder(w).Encode(token)
 		}
 	}
 }
 
-func guessWord(s word.Service) func(w http.ResponseWriter, r *http.Request) {
+func playGame(ws word.Service, ps player.Service, gs game.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		//var token = r.Header.Get("x-access-token")
+		var token = r.Header.Get("x-access-token")
 		var input word.Word
 		_ = json.NewDecoder(r.Body).Decode(&input)
-		if s.CheckIfAlpha(input) {
-			if len(input.Word) == len("hallo") {
-				json.NewEncoder(w).Encode(s.CompareWords("hallo", "hallo"))
-			} else {
-				json.NewEncoder(w).Encode(false)
-			}
+		username, err := auth.GetUsernameFromToken(token)
+		if err != nil {
+			fmt.Println("Error, could not get username for token")
+			w.WriteHeader(400)
+			json.NewEncoder(w).Encode("Error, could not get username from token")
+			return
+		}
+		id, err := ps.GetIDForPlayer(username)
+		if err != nil {
+			fmt.Println("Error, could not get id for username")
+			w.WriteHeader(400)
+			json.NewEncoder(w).Encode("Error, could not get id for username")
+			return
+		}
+		fmt.Println(id)
+		message, err := gs.GameRunner(ws, input.Word, id)
+		if err != nil {
+			w.WriteHeader(400)
+			json.NewEncoder(w).Encode("Error, Word can only contain lower case letters, and must not exceed the maximum word lenght")
+			return
 		} else {
-			json.NewEncoder(w).Encode(false)
+			json.NewEncoder(w).Encode(message)
 		}
 	}
 }

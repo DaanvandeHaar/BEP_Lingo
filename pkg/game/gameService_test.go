@@ -10,6 +10,18 @@ type mockStorage struct {
 	game []Game
 }
 
+func (m *mockStorage) ResetTryCount(i int, i2 int) bool {
+	panic("implement me")
+}
+
+func (m *mockStorage) GetCurrentGame(i int) (Game, error) {
+	panic("implement me")
+}
+
+func (m *mockStorage) GetGameForID(i int, i2 int) (Game, error) {
+	panic("implement me")
+}
+
 func (m *mockStorage) NewGame(game Game) (int, error) {
 	return 1, nil
 }
@@ -39,7 +51,7 @@ func (m *mockStorage) RaiseTryCount(gameID int, playerID int) bool {
 	return false
 }
 
-func (m *mockStorage) RaiseGameScore(gameID int, playerID int) bool {
+func (m *mockStorage) RaiseGameScore(gameID int, playerID int, score int) bool {
 	if gameID != 0 && playerID != 0 {
 		return true
 	}
@@ -108,6 +120,7 @@ func Test_service_RaiseGameScore(t *testing.T) {
 	type args struct {
 		gameID   int
 		playerID int
+		score    int
 	}
 	tests := []struct {
 		name   string
@@ -121,6 +134,7 @@ func Test_service_RaiseGameScore(t *testing.T) {
 			args: args{
 				gameID:   1,
 				playerID: 1,
+				score:    10,
 			},
 			want: true,
 		},
@@ -130,6 +144,7 @@ func Test_service_RaiseGameScore(t *testing.T) {
 			args: args{
 				gameID:   0,
 				playerID: 0,
+				score:    10,
 			},
 			want: false,
 		},
@@ -139,7 +154,7 @@ func Test_service_RaiseGameScore(t *testing.T) {
 			s := &service{
 				r: tt.fields.r,
 			}
-			if got := s.RaiseGameScore(tt.args.gameID, tt.args.playerID); got != tt.want {
+			if got := s.RaiseGameScore(tt.args.gameID, tt.args.playerID, tt.args.score); got != tt.want {
 				t.Errorf("RaiseGameScore() = %v, want %v", got, tt.want)
 			}
 		})

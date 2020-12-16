@@ -40,7 +40,7 @@ func (s Storage) NewGame(game game.Game) (int, error) {
 }
 
 func (s Storage) RaiseGameState(gameID int, playerID int) bool {
-	_, err := s.db.Query("UPDATE games SET state = state + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
+	_, err := s.db.Query("UPDATE games SET state = state + 1 WHERE id = $1 AND player_id = $2", gameID, playerID)
 	if err != nil {
 		return false
 	}
@@ -48,25 +48,33 @@ func (s Storage) RaiseGameState(gameID int, playerID int) bool {
 }
 
 func (s Storage) RaiseTryCount(gameID int, playerID int) bool {
-	_, err := s.db.Query("UPDATE games SET current_try = current_try + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
-	if err != nil {
-		return false
-	}
-	return true
-}
-func (s Storage) RaiseGameScore(gameID int, playerID int) bool {
-	_, err := s.db.Query("UPDATE games SET score = score + 1 WHERE id == $1 && player_id ==$2", gameID, playerID)
+	_, err := s.db.Query("UPDATE games SET current_try = current_try + 1 WHERE id = $1 AND player_id = $2", gameID, playerID)
 	if err != nil {
 		return false
 	}
 	return true
 }
 
-func (s Storage) GetGameForID(playerID int, gameID int) interface{} {
+func (s Storage) ResetTryCount(gameID int, playerID int) bool {
+	_, err := s.db.Query("UPDATE games SET current_try = 0 WHERE id = $1 AND player_id = $2", gameID, playerID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (s Storage) RaiseGameScore(gameID int, playerID int, score int) bool {
+	_, err := s.db.Query("UPDATE games SET score = score + $1 WHERE id = $2 AND player_id = $3", score, gameID, playerID)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (s Storage) GetGameForID(gameID int, playerID int) (game.Game, error) {
 	var game game.Game
 	err := s.db.QueryRow(`
-		SELECT (
-		        id, 
+		SELECT 	id, 
 		        player_id, 
 		        five_letter_word, 
 		        six_letter_word, 
@@ -74,31 +82,20 @@ func (s Storage) GetGameForID(playerID int, gameID int) interface{} {
 		        state, 
 		        time_epoch, 
 		        score, 
-		        current_try)
+		        current_try
 		FROM games 
-		WHERE id == $1 && player_id == $2`, gameID, playerID).Scan(
-		&game.ID,
-		&game.PlayerID,
-		&game.FiveLetterWord,
-		&game.SixLetterWord,
-		&game.SevenLetterWord,
-		&game.State,
-		&game.Time,
-		&game.Score,
-		&game.CurrentTry)
-
+		WHERE id = $1 && player_id = $2`, gameID, playerID).Scan(&game.ID, &game.PlayerID, &game.FiveLetterWord, &game.SixLetterWord, &game.SevenLetterWord, &game.State, &game.Time, &game.Score, &game.CurrentTry)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return game, err
 	}
-	return game
+	return game, nil
 }
 
-func (s Storage) GetCurrentGame(playerID int, gameID int) interface{} {
+func (s Storage) GetCurrentGame(playerID int) (game.Game, error) {
 	var game game.Game
 	err := s.db.QueryRow(`
-		SELECT (
-		        id, 
+		SELECT	id, 
 		        player_id, 
 		        five_letter_word, 
 		        six_letter_word, 
@@ -106,24 +103,14 @@ func (s Storage) GetCurrentGame(playerID int, gameID int) interface{} {
 		        state, 
 		        time_epoch, 
 		        score, 
-		        current_try)
+		        current_try
 		FROM games 
-		WHERE id == $1 
+		WHERE player_id = $1 
 		ORDER BY id DESC 
-		LIMIT 1`, gameID, playerID).Scan(
-		&game.ID,
-		&game.PlayerID,
-		&game.FiveLetterWord,
-		&game.SixLetterWord,
-		&game.SevenLetterWord,
-		&game.State,
-		&game.Time,
-		&game.Score,
-		&game.CurrentTry)
-
+		LIMIT 1`, playerID).Scan(&game.ID, &game.PlayerID, &game.FiveLetterWord, &game.SixLetterWord, &game.SevenLetterWord, &game.State, &game.Time, &game.Score, &game.CurrentTry)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		return game, err
 	}
-	return game
+	return game, nil
 }
