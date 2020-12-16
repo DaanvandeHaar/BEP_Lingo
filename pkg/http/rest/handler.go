@@ -22,12 +22,14 @@ func Handler(ws word.Service, gs game.Service, ps player.Service) *mux.Router {
 	authRouter.Use(auth.JwtVerify)
 
 	// Route handles & endpoints
-	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
-	authRouter.HandleFunc("/game/current/guess", guessWord(ws, ps, gs)).Methods("POST")
-	router.HandleFunc("/jwt", getJwt).Methods("GET")
+	authRouter.HandleFunc("/game/current/guess", playGame(ws, ps, gs)).Methods("POST")
 	authRouter.HandleFunc("/game/new", newGame(gs, ws, ps)).Methods("POST")
 	router.HandleFunc("/auth/login", login(ps)).Methods("POST")
 	router.HandleFunc("/auth/signup", signUp(ps)).Methods("POST")
+
+	// Route handles & endpoints for testing
+	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
+	router.HandleFunc("/jwt", getJwt).Methods("GET")
 
 	// return router to main.go
 	return router
@@ -110,7 +112,7 @@ func login(p player.Service) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func guessWord(ws word.Service, ps player.Service, gs game.Service) func(w http.ResponseWriter, r *http.Request) {
+func playGame(ws word.Service, ps player.Service, gs game.Service) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		var token = r.Header.Get("x-access-token")
@@ -131,9 +133,13 @@ func guessWord(ws word.Service, ps player.Service, gs game.Service) func(w http.
 			return
 		}
 		fmt.Println(id)
-		//game, err = gs.GameRunner(ws ,id, input.Word)
+		message, err := gs.GameRunner(ws, input.Word, id)
 		if err != nil {
+			w.WriteHeader(400)
+			json.NewEncoder(w).Encode("Error, Word can only contain lower case letters, and must not exceed the maximum word lenght")
 			return
+		} else {
+			json.NewEncoder(w).Encode(message)
 		}
 	}
 }

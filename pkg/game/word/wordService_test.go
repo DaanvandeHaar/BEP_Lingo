@@ -30,7 +30,7 @@ func Test_service_CheckIfAlpha(t *testing.T) {
 		r Repository
 	}
 	type args struct {
-		word Word
+		word string
 	}
 	tests := []struct {
 		name   string
@@ -41,13 +41,13 @@ func Test_service_CheckIfAlpha(t *testing.T) {
 		{
 			name:   "CHECK_IF_ALPHA_PASS",
 			fields: fields{},
-			args:   args{word: Word{"adfjkldfjkaigii"}},
+			args:   args{word: "adfjkldfjkaigii"},
 			want:   true,
 		},
 		{
 			name:   "CHECK_IF_ALPHA_FAIL",
 			fields: fields{},
-			args:   args{word: Word{"dkln8ddd"}},
+			args:   args{word: "dkln8ddd"},
 			want:   false,
 		},
 	}
@@ -86,7 +86,7 @@ func Test_service_CompareWords(t *testing.T) {
 				correctWord: "knoop",
 			},
 			want: LingoMessage{
-				tryIndex: 0,
+				TryIndex: 0,
 				Letters: []LetterInfo{{
 					LetterString:   "k",
 					LetterPosition: 0,
@@ -123,7 +123,7 @@ func Test_service_CompareWords(t *testing.T) {
 				correctWord: "kneep",
 			},
 			want: LingoMessage{
-				tryIndex: 0,
+				TryIndex: 0,
 				Letters: []LetterInfo{{
 					LetterString:   "k",
 					LetterPosition: 0,
@@ -158,7 +158,7 @@ func Test_service_CompareWords(t *testing.T) {
 			s := &service{
 				r: tt.fields.r,
 			}
-			if got := s.CompareWords(tt.args.word, tt.args.correctWord); !reflect.DeepEqual(got, tt.want) {
+			if got, _ := s.CompareWords(tt.args.word, tt.args.correctWord); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("CompareWords() = %v, want %v", got, tt.want)
 			}
 		})
