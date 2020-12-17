@@ -33,6 +33,9 @@ func (s *service) GetIDForPlayer(username string) (int, error) {
 }
 
 func (s *service) Login(player Player) (bool, string) {
+	if s.r == nil {
+		return false, ""
+	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(player.Password), bcrypt.DefaultCost)
 	fmt.Println(string(hashedPassword))
 	if err != nil {
@@ -43,7 +46,7 @@ func (s *service) Login(player Player) (bool, string) {
 
 	if valid == false {
 		fmt.Println(err)
-		return false, "err: Wrong username or passowrd"
+		return false, ""
 	} else {
 		return true, token
 	}

@@ -5,11 +5,11 @@ import (
 	"testing"
 )
 
-type mockingStorage struct {
+type mockStorage struct {
 	word []Word
 }
 
-func (m mockingStorage) GetRandomWord(i int) string {
+func (m mockStorage) GetRandomWord(i int) string {
 	switch {
 	case i < 5:
 		return ""
@@ -67,7 +67,7 @@ func Test_service_CompareWords(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
-	mR := new(mockingStorage)
+	mR := new(mockStorage)
 	type args struct {
 		word        string
 		correctWord string
@@ -133,7 +133,7 @@ func Test_service_GetRandomWord(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
-	mR := new(mockingStorage)
+	mR := new(mockStorage)
 	type args struct {
 		len int
 	}
@@ -184,7 +184,7 @@ func Test_service_GetWordInfo(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
-	mR := new(mockingStorage)
+	mR := new(mockStorage)
 	type args struct {
 		word string
 	}
@@ -217,7 +217,7 @@ func TestNewService(t *testing.T) {
 	type args struct {
 		r Repository
 	}
-	mR := new(mockingStorage)
+	mR := new(mockStorage)
 	mS := service{mR}
 	tests := []struct {
 		name string

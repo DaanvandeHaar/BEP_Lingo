@@ -10,9 +10,28 @@ import (
 type mockStorage struct {
 	game []Game
 }
+type mockinWordStorage struct {
+	word []word.Word
+}
+
+func (m mockinWordStorage) GetRandomWord(i int) string {
+	switch {
+	case i < 5:
+		return ""
+	case i == 5:
+		return "woord"
+	case i == 6:
+		return "burger"
+	case i == 7:
+		return "knuffel"
+	case i > 7:
+		return ""
+	}
+	return ""
+}
 
 func (m *mockStorage) ResetTryCount(playerID int, gameID int) bool {
-	if playerID == 1 && gameID == 1 {
+	if playerID == gameID && playerID != 0 {
 		return true
 	}
 	return false
@@ -38,9 +57,105 @@ func (m *mockStorage) GetCurrentGame(playerID int) (Game, error) {
 			PlayerID:        2,
 			State:           1,
 			CurrentTry:      0,
-			FiveLetterWord:  "wraps",
-			SixLetterWord:   "dingen",
-			SevenLetterWord: "woorden",
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 3:
+		return Game{
+			ID:              3,
+			PlayerID:        3,
+			State:           1,
+			CurrentTry:      6,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 4:
+		return Game{
+			ID:              4,
+			PlayerID:        4,
+			State:           2,
+			CurrentTry:      0,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 5:
+		return Game{
+			ID:              5,
+			PlayerID:        5,
+			State:           2,
+			CurrentTry:      1,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 6:
+		return Game{
+			ID:              6,
+			PlayerID:        6,
+			State:           2,
+			CurrentTry:      6,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 7:
+		return Game{
+			ID:              7,
+			PlayerID:        7,
+			State:           3,
+			CurrentTry:      0,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 8:
+		return Game{
+			ID:              8,
+			PlayerID:        8,
+			State:           3,
+			CurrentTry:      1,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 9:
+		return Game{
+			ID:              9,
+			PlayerID:        9,
+			State:           3,
+			CurrentTry:      6,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 10:
+		return Game{
+			ID:              10,
+			PlayerID:        10,
+			State:           4,
+			CurrentTry:      0,
+			FiveLetterWord:  "woord",
+			SixLetterWord:   "pandas",
+			SevenLetterWord: "stoelen",
 			Score:           0,
 			Time:            0,
 		}, nil
@@ -66,8 +181,68 @@ func (m *mockStorage) GetGameForID(playerID int, gameID int) (Game, error) {
 		return Game{
 			ID:              2,
 			PlayerID:        2,
-			State:           0,
+			State:           1,
 			CurrentTry:      0,
+			FiveLetterWord:  "wraps",
+			SixLetterWord:   "dingen",
+			SevenLetterWord: "woorden",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 3:
+		return Game{
+			ID:              3,
+			PlayerID:        3,
+			State:           1,
+			CurrentTry:      6,
+			FiveLetterWord:  "wraps",
+			SixLetterWord:   "dingen",
+			SevenLetterWord: "woorden",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 4:
+		return Game{
+			ID:              4,
+			PlayerID:        4,
+			State:           2,
+			CurrentTry:      0,
+			FiveLetterWord:  "wraps",
+			SixLetterWord:   "dingen",
+			SevenLetterWord: "woorden",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 5:
+		return Game{
+			ID:              5,
+			PlayerID:        5,
+			State:           2,
+			CurrentTry:      1,
+			FiveLetterWord:  "wraps",
+			SixLetterWord:   "dingen",
+			SevenLetterWord: "woorden",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 6:
+		return Game{
+			ID:              6,
+			PlayerID:        6,
+			State:           2,
+			CurrentTry:      1,
+			FiveLetterWord:  "wraps",
+			SixLetterWord:   "dingen",
+			SevenLetterWord: "woorden",
+			Score:           0,
+			Time:            0,
+		}, nil
+	case 7:
+		return Game{
+			ID:              7,
+			PlayerID:        7,
+			State:           2,
+			CurrentTry:      6,
 			FiveLetterWord:  "wraps",
 			SixLetterWord:   "dingen",
 			SevenLetterWord: "woorden",
@@ -88,15 +263,22 @@ func (m *mockStorage) RaiseGameState(gameID int, playerID int) bool {
 		return false
 	case gameID == 0 && playerID == 0:
 		return false
-	case gameID == 1 && playerID == 0:
-		return false
-	case gameID == 0 && playerID == 1:
-		return false
 	case gameID == 1 && playerID == 1:
 		return true
 	case gameID == 2 && playerID == 2:
 		return true
+	case gameID == 3 && playerID == 3:
+		return true
+	case gameID == 4 && playerID == 4:
+		return true
+	case gameID == 5 && playerID == 5:
+		return true
+	case gameID == 6 && playerID == 6:
+		return true
+	case gameID == 7 && playerID == 7:
+		return true
 	}
+
 	return false
 }
 
@@ -134,7 +316,7 @@ func TestInitGame(t *testing.T) {
 			name:   "INIT_GAME_PASS",
 			fields: fields{mR},
 			args: args{
-				words:    []string{"knoop", "schiet", "schepen"},
+				words:    []string{"woord", "pandas", "stoelen"},
 				playerID: 1,
 			},
 			want: Game{
@@ -142,9 +324,9 @@ func TestInitGame(t *testing.T) {
 				PlayerID:        1,
 				State:           0,
 				CurrentTry:      0,
-				FiveLetterWord:  "knoop",
-				SixLetterWord:   "schiet",
-				SevenLetterWord: "schepen",
+				FiveLetterWord:  "woord",
+				SixLetterWord:   "pandas",
+				SevenLetterWord: "stoelen",
 				Score:           0,
 				Time:            time.Now().Unix(),
 			},
@@ -252,7 +434,7 @@ func TestRaiseGameState(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "RAISE_GAME_STATE_PASS",
+			name:   "RAISE_GAME_STATE_FAIL_1",
 			fields: fields{mR},
 			args: args{
 				gameID:   0,
@@ -261,7 +443,7 @@ func TestRaiseGameState(t *testing.T) {
 			want: false,
 		},
 		{
-			name:   "RAISE_GAME_STATE_PASS",
+			name:   "RAISE_GAME_STATE_FAIL_2",
 			fields: fields{nil},
 			args: args{
 				gameID:   0,
@@ -327,9 +509,9 @@ func TestGetCurrentGame(t *testing.T) {
 				PlayerID:        2,
 				State:           1,
 				CurrentTry:      0,
-				FiveLetterWord:  "wraps",
-				SixLetterWord:   "dingen",
-				SevenLetterWord: "woorden",
+				FiveLetterWord:  "woord",
+				SixLetterWord:   "pandas",
+				SevenLetterWord: "stoelen",
 				Score:           0,
 				Time:            0,
 			},
@@ -368,6 +550,8 @@ func TestGameRunner(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
+	mR := new(mockStorage)
+	mwR := new(mockinWordStorage)
 	type args struct {
 		ws       word.Service
 		word     string
@@ -380,7 +564,495 @@ func TestGameRunner(t *testing.T) {
 		want    word.LingoMessage
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "TEST_GAME_RUNNER_PASS_1",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "woord",
+				playerID: 1,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "w____",
+				Correct:  false,
+				Letters:  nil,
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_2",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "woord",
+				playerID: 2,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have guessed the word correctly. Continuing to 6 letter game stage. Hint for 6 letter word: p_____",
+				Correct:  true,
+				Letters: []word.LetterInfo{{
+					LetterString:   "w",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "r",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_3",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "waard",
+				playerID: 2,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Correct:  false,
+				Letters: []word.LetterInfo{{
+					LetterString:   "w",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 1,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 2,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "r",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_4",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "waard",
+				playerID: 2,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Correct:  false,
+				Letters: []word.LetterInfo{{
+					LetterString:   "w",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 1,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 2,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "r",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_4",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "waard",
+				playerID: 3,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have not guessed the correct word in time. Continuing to 6 letter game stage. Hint for 6 letter word: p_____",
+				Correct:  false,
+				Letters:  nil,
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_5",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "pandas",
+				playerID: 4,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have guessed the word correctly. Continuing to 7 letter game stage. Hint for 7 letter word: s______",
+				Correct:  true,
+				Letters: []word.LetterInfo{{
+					LetterString:   "p",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "s",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_5",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "pondas",
+				playerID: 4,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Correct:  false,
+				Letters: []word.LetterInfo{{
+					LetterString:   "p",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 1,
+					RightPlace:     false,
+					RightLetter:    false,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "s",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_6",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "pandas",
+				playerID: 5,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have guessed the word correctly. Continuing to 7 letter game stage. Hint for 7 letter word: s______",
+				Correct:  true,
+				Letters: []word.LetterInfo{{
+					LetterString:   "p",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "d",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "a",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "s",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_7",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "pandas",
+				playerID: 6,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have not guessed the correct word in time. Continuing to 7 letter game stage. Hint for 7 letter word: s______",
+				Correct:  false,
+				Letters:  nil,
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_8",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "stoelen",
+				playerID: 7,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have guessed the word correctly. The game is finished",
+				Correct:  true,
+				Letters: []word.LetterInfo{{
+					LetterString:   "s",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "t",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "o",
+					LetterPosition: 2,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "l",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 6,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_8",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "steelen",
+				playerID: 7,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Correct:  false,
+				Letters: []word.LetterInfo{{
+					LetterString:   "s",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "t",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 2,
+					RightPlace:     false,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "l",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 6,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_8",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "steelen",
+				playerID: 8,
+			},
+			want: word.LingoMessage{
+				TryIndex: 1,
+				Correct:  false,
+				Letters: []word.LetterInfo{{
+					LetterString:   "s",
+					LetterPosition: 0,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "t",
+					LetterPosition: 1,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 2,
+					RightPlace:     false,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 3,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "l",
+					LetterPosition: 4,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "e",
+					LetterPosition: 5,
+					RightPlace:     true,
+					RightLetter:    true,
+				}, {
+					LetterString:   "n",
+					LetterPosition: 6,
+					RightPlace:     true,
+					RightLetter:    true,
+				}},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_9",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "steelen",
+				playerID: 9,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "You have not guessed the correct word in time. The game is finished",
+				Correct:  false,
+				Letters:  nil,
+			},
+			wantErr: false,
+		},
+		{
+			name:   "TEST_GAME_RUNNER_PASS_10",
+			fields: fields{mR},
+			args: args{
+				ws:       word.NewService(mwR),
+				word:     "steelen",
+				playerID: 10,
+			},
+			want: word.LingoMessage{
+				TryIndex: 0,
+				Info:     "This game is already finished!",
+				Correct:  false,
+				Letters:  nil,
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -426,7 +1098,7 @@ func TestNewService(t *testing.T) {
 	}
 }
 
-func Test_service_RaiseTryCount(t *testing.T) {
+func TestRaiseTryCount(t *testing.T) {
 	type fields struct {
 		r Repository
 	}
