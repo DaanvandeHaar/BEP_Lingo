@@ -92,7 +92,7 @@ func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.L
 				return ws.GetEmptyMessage(), errors.New("Error, Something went wrong while comparing words")
 			}
 			if &message.Correct != nil && message.Correct {
-				message.Info = "U have guessed the word correctly. Continuing to 6 letter game stage. Hint for 6 letter word: " + ws.GetWordHelp(game.SixLetterWord)
+				message.Info = "You have guessed the word correctly. Continuing to 6 letter game stage. Hint for 6 letter word: " + ws.GetWordHelp(game.SixLetterWord)
 				s.r.RaiseGameScore(game.ID, game.PlayerID, (50)-(game.CurrentTry*10))
 				s.r.ResetTryCount(game.ID, game.PlayerID)
 				s.r.RaiseGameState(game.ID, game.PlayerID)
@@ -116,7 +116,7 @@ func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.L
 				return ws.GetEmptyMessage(), errors.New("Error, Something went wrong while comparing words")
 			}
 			if &message.Correct != nil && message.Correct {
-				message.Info = "U have guessed the word correctly. Continuing to 7 letter game stage. Hint for 7 letter word: " + ws.GetWordHelp(game.SevenLetterWord)
+				message.Info = "You have guessed the word correctly. Continuing to 7 letter game stage. Hint for 7 letter word: " + ws.GetWordHelp(game.SevenLetterWord)
 				s.r.RaiseGameScore(game.ID, game.PlayerID, (50)-(game.CurrentTry*10))
 				s.r.ResetTryCount(game.ID, game.PlayerID)
 				s.r.RaiseGameState(game.ID, game.PlayerID)
@@ -140,7 +140,7 @@ func (s *service) GameRunner(ws word.Service, word string, playerID int) (word.L
 				return ws.GetEmptyMessage(), errors.New("Error, Something went wrong while comparing words")
 			}
 			if &message.Correct != nil && message.Correct {
-				message.Info = "U have guessed the word correctly. The game is finished "
+				message.Info = "You have guessed the word correctly. The game is finished"
 				s.r.RaiseGameScore(game.ID, game.PlayerID, (50)-(game.CurrentTry*10))
 				s.r.ResetTryCount(game.ID, game.PlayerID)
 				s.r.RaiseGameState(game.ID, game.PlayerID)

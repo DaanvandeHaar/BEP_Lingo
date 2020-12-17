@@ -46,64 +46,65 @@ func (m mockStorage) GetIDForPlayer(s string) (int, error) {
 	return 0, errors.New("err, other error")
 }
 
-//func TestLogin(t *testing.T) {
-//	type fields struct {
-//		r Repository
-//	}
-//	mR := new(mockStorage)
-//	type args struct {
-//		player Player
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//		want   bool
-//		want1  string
-//	}{
-//		{
-//			name:   "LOGIN_TEST_PASS",
-//			fields: fields{mR},
-//			args: args{player: Player{
-//				UserName: "daan",
-//				Password: "daan",
-//			},
-//			},
-//			want: true,
-//			want1: "daantoken",
-//		},
-//		{
-//			name:   "LOGIN_TEST_FAIL_1",
-//			fields: fields{},
-//			args: args{player: Player{
-//				UserName: "henk",
-//				Password: "henk",
-//			},
-//			},
-//			want: false,
-//		},
-//		{
-//			name:   "LOGIN_TEST_FAIL_2",
-//			fields: fields{},
-//			args:   args{player: Player{}},
-//			want:   false,
-//		},
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			s := &service{
-//				r: tt.fields.r,
-//			}
-//			got, got1 := s.Login(tt.args.player)
-//			if got != tt.want {
-//				t.Errorf("Login() got = %v, want %v", got, tt.want)
-//			}
-//			if got1 != tt.want1 {
-//				t.Errorf("Login() got1 = %v, want %v", got1, tt.want1)
-//			}
-//		})
-//	}
-//}
+func TestLogin(t *testing.T) {
+	type fields struct {
+		r Repository
+	}
+	mR := new(mockStorage)
+	type args struct {
+		player Player
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+		want1  string
+	}{
+		{
+			name:   "LOGIN_TEST_PASS",
+			fields: fields{mR},
+			args: args{player: Player{
+				UserName: "daan",
+				Password: "daan",
+			},
+			},
+			want:  true,
+			want1: "daantoken",
+		},
+		{
+			name:   "LOGIN_TEST_FAIL_1",
+			fields: fields{},
+			args: args{player: Player{
+				UserName: "henk",
+				Password: "henk",
+			},
+			},
+			want:  false,
+			want1: "",
+		},
+		{
+			name:   "LOGIN_TEST_FAIL_2",
+			fields: fields{},
+			args:   args{player: Player{}},
+			want:   false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &service{
+				r: tt.fields.r,
+			}
+			got, got1 := s.Login(tt.args.player)
+			if got != tt.want {
+				t.Errorf("Login() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("Login() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
 
 func TestSignUp(t *testing.T) {
 	type fields struct {
