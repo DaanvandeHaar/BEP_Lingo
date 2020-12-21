@@ -1,0 +1,40 @@
+
+name: CD
+
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+ 
+    runs-on: ubuntu-latest
+     
+    steps:
+    - uses: actions/checkout@v1
+ 
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.13
+  
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi 
+ 
+    - name: Build
+      run: go build
+ 
+    - uses: actions/gcloud/auth@master
+      env:
+        GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+ 
+    - uses: actions/gcloud/cli@master
+      with:
+        args: "app deploy --quiet --project=bep_lingo"
