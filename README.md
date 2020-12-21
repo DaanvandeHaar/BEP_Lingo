@@ -57,7 +57,17 @@ Er is gebruik gemaakt van hexagonal domain driven design, de domein laag en daar
 | Dependency inversion     | Zwaar gebruik van dependency injection in alle services                                                   |
 
 ## Static analysis tools
-
 Er is gebruik gemaakt van sonarCloud via CI. Bij elke merge of push op master zal netheid van de code gecontroleerd worden, vervolgens zullen hiervoor “grades” gecreëerd worden. De badges hiervan zullen in README.md geplaatst worden.
+
+## Performance en security analysis
+Mogelijke security risks worden gecontroleerd door SonarCloud. Performance is bij te houden via Google cloud App Eninge.
+
+## Deployment
+Gedeployed op Google cloud App Engine doormiddel van CD met github actions.
+
+## Creatieve ruimte
+Ik heb tijdens dit project bijna alleen maar gebruikt van programmeertalen, technologieën en frameworks die ik voor dit project nog nooit eerder had gebruikt. De learning-curve was vooral in het begin lastig maar ik heb erg veel geleerd. 
+
+
 
 
