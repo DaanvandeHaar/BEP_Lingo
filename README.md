@@ -23,7 +23,7 @@ Een lingo API voor het vak BEP aan de HU
 | /getrandom          | /test  | Test functie om een random woord met de gewenste lengte te verkrijgen     |
 
 ## Build tools en pipeline
-Er is gebruik gemaakt van github actions voor CI/CD. Bij elke merge of push op master op master worden automatische alle tests gedraaid en word er gekeken naar code smells en security risks met SonarCloud. Als deze slagen zal de merge/push succesvol zijn.
+Er is gebruik gemaakt van github actions voor CI/CD. Bij elke merge of push op master worden automatische alle tests gedraaid en word er gekeken naar code smells en security risks met SonarCloud. Als deze slagen zal de merge/push succesvol zijn.
 Bij elke release word net als bij elke merge of push op master alle unit test gedraaid. Vervolgens word het project getest en vervolgens via Google App Engine (Google Cloud) gebuild en automatisch gedeployeerd.
 
 
