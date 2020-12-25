@@ -42,7 +42,7 @@ Er is gebruik gemaakt van clean tests. Test draaien onafhankelijk en testen de d
 Coverage word bijgehouden via go coverage. Bij elke push of merge met master word een nieuwe coverage badge gecreëerd via gopherbadger.
 
 ## Mate van structuur
-Er is gebruik gemaakt van hexagonal domain driven design, de domein laag en daarbij behorende services zijn opgedeeld in packages met packages die dezelfde structs gebruiken. Ook is er veelvuldig gebruik gemaakt van dependency injection, Repositories worden meegegeven aan services die vervolgens worden meegegeven aan API endpoints. Op deze manier kunnen repositories en services makkelijk verwisseld worden voor andere repositories en services. Dit wordt ook tijdens het testen toegepast waar een mock repository aan de service tests wordt meegegeven.
+Er is gebruik gemaakt van hexagonal domain driven design, de domein laag en daarbij behorende services zijn opgedeeld in packages met services die dezelfde structs gebruiken. Ook is er veelvuldig gebruik gemaakt van dependency injection, Repositories worden meegegeven aan services die vervolgens worden meegegeven aan API endpoints. Op deze manier kunnen repositories en services makkelijk verwisseld worden voor andere repositories en services. Dit wordt ook tijdens het testen toegepast waar een mock repository aan de service tests wordt meegegeven.
 
 ✅ TODO: Auth page veranderen naar service.
 
