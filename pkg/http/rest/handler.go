@@ -28,8 +28,8 @@ func Handler(ws word.Service, gs game.Service, ps player.Service) *mux.Router {
 	router.HandleFunc("/auth/signup", signUp(ps)).Methods("POST")
 
 	// Route handles & endpoints for testing
-	authRouter.HandleFunc("/word/getrandom", getRandomWord(ws)).Methods("GET")
-	router.HandleFunc("/jwt", getJwt).Methods("GET")
+	authRouter.HandleFunc("test/word/getrandom", getRandomWord(ws)).Methods("GET")
+	router.HandleFunc("test/jwt", getJwt).Methods("GET")
 
 	// return router to main.go
 	return router
