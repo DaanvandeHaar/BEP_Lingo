@@ -3,6 +3,8 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/jackc/pgx/v4/stdlib"
+	"os"
 )
 
 type Storage struct {
@@ -10,12 +12,12 @@ type Storage struct {
 }
 
 func NewStorage() *Storage {
-	
-	const (
-		dbUser					= "postgres"
-		dbPwd 					= "admin"
-		instanceConnectionName			= "bep-lingo:europe-west1:lingodb"
-		dbName					= "lingo_db"
+
+	var (
+		dbUser                 = os.Getenv("USER")
+		dbPwd                  = os.Getenv("PASSWORD")
+		instanceConnectionName = os.Getenv("CONNECTION_NAME")
+		dbName                 = os.Getenv("DB_NAME")
 	)
 
 	socketDir := "/cloudsql"
@@ -23,7 +25,7 @@ func NewStorage() *Storage {
 	var dbURI string
 	dbURI = fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
 
-	db, err := sql.Open("postges", dbURI)
+	db, err := sql.Open("pgx", dbURI)
 	if err != nil {
 		return nil
 	}

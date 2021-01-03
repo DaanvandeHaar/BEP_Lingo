@@ -3,7 +3,14 @@ runtime: go115  # or another supported version
 instance_class: F2
 
 env_variables:
-  BUCKET_NAME: "example-gcs-bucket"
+  KEY: f34a54b3c45ca43c05bb
+  PW_SALT_BYTES: 32
+  PW_HASH_BYTES: 64
+
+  USER : postgres
+  PASSWORD : admin
+  CONNECTION_NAME: bep-lingo:europe-west1:lingodb
+  DB_NAME: lingo_db
 
 handlers:
 - url: /stylesheets
@@ -15,3 +22,6 @@ handlers:
 
 - url: /.*
   script: auto
+
+
+
