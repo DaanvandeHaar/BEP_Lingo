@@ -22,6 +22,8 @@ Een lingo API voor het vak BEP aan de HU
 | /jwt                | /test  | Test functie om tijdelijke jwt tokens te genereren                        |
 | /getrandom          | /test  | Test functie om een random woord met de gewenste lengte te verkrijgen     |
 
+https://bep-lingo.ew.r.appspot.com
+
 ## Build tools en pipeline
 Er is gebruik gemaakt van github actions voor CI/CD. Bij elke merge of push op master worden automatische alle tests gedraaid en wordt er gekeken naar code smells en security risks met SonarCloud. Als deze slagen zal de merge/push succesvol zijn.
 Bij elke release wordt net als bij elke merge of push op master alle unit test gedraaid. Vervolgens wordt het project getest en vervolgens via Google App Engine (Google Cloud) gebuild en automatisch gedeployeerd.
