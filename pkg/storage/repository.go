@@ -14,7 +14,7 @@ func NewStorage() *Storage {
 	const (
 		dbUser					= "postgres"
 		dbPwd 					= "admin"
-		instanceConnectionName	= "bep-lingo:europe-west1:lingodb"
+		instanceConnectionName			= "bep-lingo:europe-west1:lingodb"
 		dbName					= "lingo_db"
 	)
 
@@ -23,7 +23,7 @@ func NewStorage() *Storage {
 	var dbURI string
 	dbURI = fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
 
-	db, err := sql.Open("pgx", dbURI)
+	db, err := sql.Open("postges", dbURI)
 	if err != nil {
 		return nil
 	}
