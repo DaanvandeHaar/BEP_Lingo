@@ -18,7 +18,7 @@ type Claims struct {
 }
 
 func GenerateJWT(player player.Player) string {
-	var mySignInKey = []byte(os.Getenv("KEY"))
+	var mySignInKey = []byte("f34a54b3c45ca43c05bb")
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -35,7 +35,7 @@ func GenerateJWT(player player.Player) string {
 	return tokenString
 }
 func GetUsernameFromToken(tokenStr string) (string, error) {
-	mySignInKey := []byte(os.Getenv("KEY"))
+	mySignInKey := []byte("f34a54b3c45ca43c05bb")
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		return mySignInKey, nil
 	})

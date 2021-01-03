@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/jackc/pgx/v4/stdlib"
-	"os"
 )
 
 type Storage struct {
@@ -14,10 +13,10 @@ type Storage struct {
 func NewStorage() *Storage {
 
 	var (
-		dbUser                 = os.Getenv("USER")
-		dbPwd                  = os.Getenv("PASSWORD")
-		instanceConnectionName = os.Getenv("CONNECTION_NAME")
-		dbName                 = os.Getenv("DB_NAME")
+		dbUser                 = "postgres"
+		dbPwd                  = "admin"
+		instanceConnectionName = "bep-lingo:europe-west1:lingodb"
+		dbName                 = "lingo_db"
 	)
 
 	socketDir := "/cloudsql"
