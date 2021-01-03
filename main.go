@@ -23,6 +23,6 @@ func main() {
 
 	router := rest.Handler(wordService, gameService, playerService)
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Fatal(http.ListenAndServe(":8080", router))
 
 }
