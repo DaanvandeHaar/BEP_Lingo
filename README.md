@@ -24,8 +24,6 @@ Een lingo API voor het vak BEP aan de HU
 
 https://bep-lingo.ew.r.appspot.com
 
-❌ Een deel van de functionaliteit werkt alleen lokaal door een probleem met google cloud SQL het project is echter wel succesvol gedeployed. alle functies die geen gebruik maken van de database werken wel.
-
 ## Build tools en pipeline
 Er is gebruik gemaakt van github actions voor CI/CD. Bij elke merge of push op master worden automatische alle tests gedraaid en wordt er gekeken naar code smells en security risks met SonarCloud. Als deze slagen zal de merge/push succesvol zijn.
 Bij elke release wordt net als bij elke merge of push op master alle unit test gedraaid. Vervolgens wordt het project getest en vervolgens via Google App Engine (Google Cloud) gebuild en automatisch gedeployeerd.
@@ -68,6 +66,7 @@ Mogelijke security risks worden gecontroleerd door SonarCloud. Performance is bi
 
 ## Deployment
 Gedeployed op Google cloud App Engine doormiddel van CD met github actions.
+Logging is mogelijk gebruikt door Google Cloud, alle Errors/Warnings/Logs zijn in te zien via de Google Cloud console.
 
 ## Creatieve ruimte
 Ik heb tijdens dit project bijna alleen maar gebruikt van programmeertalen, technologieën en frameworks die ik voor dit project nog nooit eerder had gebruikt. De learning-curve was vooral in het begin lastig maar ik heb erg veel geleerd. 
