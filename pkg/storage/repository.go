@@ -11,26 +11,24 @@ type Storage struct {
 
 func NewStorage() *Storage {
 
-	//host     := os.Getenv("HOST")
-	//port, err := strconv.Atoi(os.Getenv("PORT"))
-	//user     := os.Getenv("USER")
-	//password := os.Getenv("PASSWORD")
-	//dbname   := os.Getenv("DB_NAME")
-
 	const (
-		host     = "localhost"
-		port     = 5432
-		user     = "postgres"
-		password = "admin"
-		dbname   = "lingo_db"
+		dbUser					= "postgres"
+		dbPwd 					= "admin"
+		instanceConnectionName			= "bep-lingo:europe-west1:lingodb"
+		dbName					= "lingo_db"
 	)
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	if !isSet {
+		socketDir = "/cloudsql"
+	}
 
-	db, err := sql.Open("postgres", psqlInfo)
+	var dbURI string
+	dbURI = fmt.Sprintf("user=%s password=%s database=%s host=%s/%s", dbUser, dbPwd, dbName, socketDir, instanceConnectionName)
+
+	db, err := sql.Open("pgx", dbURI)
 	if err != nil {
-		fmt.Println(err)
+		return nil
 	}
 
 	return &Storage{db}
